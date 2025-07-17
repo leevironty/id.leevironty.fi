@@ -1,0 +1,66 @@
+import { define } from "@utils";
+import { getCookies, Cookie, setCookie } from "@std/http/cookie";
+import { getInvitedUser } from "@repos/invite.ts";
+import { createRegistrationChallenge } from "@repos/challenge.ts";
+import { createToken } from "@utils";
+import {
+  generateRegistrationOptions,
+} from '@simplewebauthn/server';
+import config from "@config";
+
+
+export const handler = define.handlers({
+  async GET(ctx) {
+    console.log('at register/start')
+    const cookies = getCookies(ctx.req.headers);
+    console.log('cookies: ', cookies)
+    const invite = cookies['__Host-invite'];
+    if (invite === undefined) {
+      return Response.json({error: "invite cookie not set"}, {status: 400})
+    }
+
+    const user = getInvitedUser(invite);
+    if (user === null) {
+      return Response.json({error: "invite is not valid"}, {status: 400})
+    }
+
+    const registrationOptions = await generateRegistrationOptions({
+      rpName: config.rpName,
+      rpID: config.domain,
+      userName: user.username,
+      userDisplayName: user.displayname,
+      attestationType: 'none',
+      authenticatorSelection: {
+        residentKey: 'preferred',
+        userVerification: 'preferred',
+        authenticatorAttachment: 'platform',
+      }
+    })
+    const registration_challenge_token = createToken(32)
+    // TODO: is webauthn user id necessary here?
+    createRegistrationChallenge(user.id, registrationOptions.user.id ,registration_challenge_token, registrationOptions.challenge, 60)
+    const headers = new Headers()
+    const cookie: Cookie = {
+      name: "__Host-registration",
+      value: registration_challenge_token,
+      httpOnly: true,
+      sameSite: 'Lax',
+      maxAge: 60,
+    }
+    setCookie(headers, cookie)
+    return Response.json(registrationOptions, {headers: headers})
+
+    // try {
+    //   const res = await ctx.next();
+    // } catch (error) {
+    //   console.log('catched somethign')
+    //   console.error(error)
+    // }
+    // console.log('asdf')
+    // res.body = 'hello'
+    // const response = new Response('hello!', {status: 400, headers: new Headers({})})
+    // return new Response(
+    //   `Hello!`,
+    // );
+  },
+});
