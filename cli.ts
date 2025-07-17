@@ -2,11 +2,12 @@
 import { program } from 'commander';
 
 // import * as repo from './server/repository.ts';
-import * as user from '@repos/user.ts';
-import * as invite from '@repos/invite.ts';
-import * as challenge from '@repos/challenge.ts';
-import * as credential from '@repos/credentials.ts'
-import { now } from "@repos/util.ts";
+import * as user from '@/db/repos/user.ts';
+import * as invite from '@/db/repos/invite.ts';
+import * as challenge from '@/db/repos/challenge.ts';
+import * as credential from '@/db/repos/credentials.ts';
+import * as session from "@/db/repos/session.ts";
+import { now } from "@/db/repos/util.ts";
 
 
 
@@ -45,7 +46,7 @@ debugCommand.action(() => {
   // const challenges = repo.listChallenges()
   const invites = invite.listInvites()
   const credentials = credential.listCredentials()
-  // const sessions = repo.listSessions()
+  const sessions = session.listSessions()
 
   console.log({
     users,
@@ -53,7 +54,7 @@ debugCommand.action(() => {
     loginChallenges,
     invites,
     credentials,
-    // sessions,
+    sessions,
   })
 })
 

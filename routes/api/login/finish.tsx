@@ -1,15 +1,15 @@
-import { createToken, define } from "@utils";
+import { createToken, define } from "@/lib/utils.ts";
 import {
   verifyAuthenticationResponse,
-  AuthenticationResponseJSON
 } from '@simplewebauthn/server';
 
 import { getCookies, setCookie } from "@std/http/cookie";
-import { getLoginChallenge } from "@repos/challenge.ts";
-import { getCredentials, updateCredential } from "@repos/credentials.ts";
-import { b64ToUint8Array } from "@utils";
-import config from "@config";
+import { getLoginChallenge } from "@/db/repos/challenge.ts";
+import { getCredentials, updateCredential } from "@/db/repos/credentials.ts";
+import { b64ToUint8Array } from "@/lib/utils.ts";
+import config from "@/config.ts";
 import z from "zod";
+import { createSessionHeader } from "@/lib/session.ts";
 
 
 const idAndUserHandle = z.object({
@@ -30,7 +30,7 @@ export const handler = define.handlers({
       return Response.json({error: 'must provide user handle'}, {status: 400})
     }
     const cookies = getCookies(ctx.req.headers);
-    const login_token = cookies['__Host-login'];
+    const login_token = cookies[config.cookieName.login];
     if (login_token === undefined) {
       return Response.json({error: 'login cookie missing'}, {status: 400})
     }
@@ -39,10 +39,7 @@ export const handler = define.handlers({
       return Response.json({error: 'login token is invalid'}, {status: 400})
     }
 
-    // const credential_id = typeof authenticationResponse?.id === "string" ? authenticationResponse.id : null
-
     console.log(authenticationResponse)
-    console.log('tbc')
 
     const credentials = getCredentials(id_and_handle.id, id_and_handle.response.userHandle)
     if (credentials === null) {
@@ -68,20 +65,7 @@ export const handler = define.handlers({
       return Response.json({error: 'verification failed'}, {status: 400})
     }
 
-    // TODO: generate session token
-
-    const headers = new Headers()
-    const session_token = createToken(32);
-    // TODO: this may need adjustments for subdomains?
-    setCookie(headers, {
-      name: '__Host-session',
-      value: session_token,
-      httpOnly: true,
-      sameSite: 'Lax'
-    })
-
-
-
-    return Response.json({ok: true}, {})
+    const headers = createSessionHeader(credentials.user_id)
+    return Response.json({ok: true}, {headers: headers})
   },
 });

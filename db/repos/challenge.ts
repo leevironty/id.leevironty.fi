@@ -2,7 +2,7 @@ import { hash } from "node:crypto";
 import db from '../client.ts';
 import * as models from '../models.ts';
 import { now, listObjs } from './util.ts';
-import { createToken, hashToken} from '@utils';
+import { createToken, hashToken} from '@/lib/utils.ts';
 
 
 export function createRegistrationChallenge(user_id: number, webauthn_user_id: string, token: string, challenge: string, valid_for_seconds: number) {
@@ -38,7 +38,7 @@ export function getRegistrationChallenge(challenge_token: string) {
   return models.InviteChallengeSchema.pick({challenge: true, user_id: true, webauthn_user_id: true}).parse(result)
 }
 
-export function getLoginChallenge(challenge_token: string): string | null {
+export function getLoginChallenge(challenge_token: string) {
   const challenge_token_hash = hashToken(challenge_token);
   const result = db.prepare(`
     DELETE FROM challenges

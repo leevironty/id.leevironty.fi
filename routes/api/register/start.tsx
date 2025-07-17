@@ -1,12 +1,12 @@
-import { define } from "@utils";
+import { define } from "@/lib/utils.ts";
 import { getCookies, Cookie, setCookie } from "@std/http/cookie";
-import { getInvitedUser } from "@repos/invite.ts";
-import { createRegistrationChallenge } from "@repos/challenge.ts";
-import { createToken } from "@utils";
+import { getInvitedUser } from "@/db/repos/invite.ts";
+import { createRegistrationChallenge } from "@/db/repos/challenge.ts";
+import { createToken } from "@/lib/utils.ts";
 import {
   generateRegistrationOptions,
 } from '@simplewebauthn/server';
-import config from "@config";
+import config from "@/config.ts";
 
 
 export const handler = define.handlers({
@@ -14,7 +14,7 @@ export const handler = define.handlers({
     console.log('at register/start')
     const cookies = getCookies(ctx.req.headers);
     console.log('cookies: ', cookies)
-    const invite = cookies['__Host-invite'];
+    const invite = cookies[config.cookieName.invite];
     if (invite === undefined) {
       return Response.json({error: "invite cookie not set"}, {status: 400})
     }
@@ -41,7 +41,7 @@ export const handler = define.handlers({
     createRegistrationChallenge(user.id, registrationOptions.user.id ,registration_challenge_token, registrationOptions.challenge, 60)
     const headers = new Headers()
     const cookie: Cookie = {
-      name: "__Host-registration",
+      name: config.cookieName.registration,
       value: registration_challenge_token,
       httpOnly: true,
       sameSite: 'Lax',

@@ -24,6 +24,9 @@ const handleRegisterFlow = async () => {
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify(registrationResponse)
   })
+  if (verification.ok) {
+    window.location.href = '/'
+  }
   // console.log(verification)
   // console.log('to be continued')
   // TODO: notify user of errors in case verification is not ok

@@ -1,12 +1,13 @@
 import { useSignal } from "@preact/signals";
-import { define } from "@utils";
+import { define } from "@/lib/utils.ts";
 import { PageProps } from "fresh";
-import Counter from "../../islands/Counter.tsx";
-import Register from "@islands/Register.tsx"
+import Counter from "@/islands/Counter.tsx";
+import Register from "@/islands/Register.tsx"
 
-import { getInvitedUser } from "@repos/invite.ts";
+import { getInvitedUser } from "@/db/repos/invite.ts";
 
 import { setCookie, Cookie } from "@std/http/cookie"
+import config from '@/config.ts';
 
 interface Data {
   name: string;
@@ -80,7 +81,7 @@ export const handler = define.handlers({
     }
     const headers = new Headers()
     const cookie: Cookie = {
-      name: "__Host-invite",
+      name: config.cookieName.invite,
       value: invite_token,
       httpOnly: true,
       sameSite: 'Lax',

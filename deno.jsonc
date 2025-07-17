@@ -5,7 +5,8 @@
     "build": "deno run -A dev.ts build",
     "start": "deno run -A main.ts",
     "update": "deno run -A -r jsr:@fresh/update .",
-    "cli": "deno run -A cli.ts"
+    "cli": "deno run -A cli.ts",
+    "seed": "rm -f database.db  && deno task cli user create leevi Leevi && deno task cli user get-token 1"
   },
   "lint": {
     "rules": {
@@ -29,10 +30,11 @@
     "@preact/signals": "npm:@preact/signals@^2.0.4",
     "tailwindcss": "npm:tailwindcss@^3.4.3",
     "zod": "npm:zod@^4.0.5",
-    "@utils": "./utils.ts",
-    "@islands/": "./islands/",
-    "@repos/": "./db/repos/",
-    "@config": "./config.ts"
+    "@/": "./"
+    // "@lib/": "./lib/",
+    // "@islands/": "./islands/",
+    // "@/db/repos/": "./db/repos/",
+    // "@config": "./config.ts"
   },
   "compilerOptions": {
     "lib": [

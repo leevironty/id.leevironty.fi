@@ -1,12 +1,14 @@
+import { createToken } from "@/lib/utils.ts";
 import db from '../client.ts';
 import * as models from '../models.ts';
 import { now, listObjs } from './util.ts';
 
 export function createUser(username: string, displayname: string): number {
+  const subject = createToken(32);
   const response = db.prepare(`
-    INSERT INTO users(username, displayname, created_at)
-    VALUES (?, ?, ?) RETURNING id;
-  `).get(username, displayname, now());
+    INSERT INTO users(username, displayname, created_at, subject)
+    VALUES (?, ?, ?, ?) RETURNING id;
+  `).get(username, displayname, now(), subject);
 
   const user = models.UserSchema.pick({ id: true }).parse(response);
   return user.id;

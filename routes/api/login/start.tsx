@@ -1,12 +1,12 @@
-import { define } from "@utils";
+import { define } from "@/lib/utils.ts";
 
 import {
   generateAuthenticationOptions,
 } from '@simplewebauthn/server';
-import config from "@config";
+import config from "@/config.ts";
 import { setCookie } from "@std/http/cookie";
-import { createToken } from "@utils";
-import { createLoginChallenge, } from "@repos/challenge.ts";
+import { createToken } from "@/lib/utils.ts";
+import { createLoginChallenge, } from "@/db/repos/challenge.ts";
 
 
 export const handler = define.handlers({
@@ -18,7 +18,7 @@ export const handler = define.handlers({
     createLoginChallenge(authenticationOptons.challenge, login_token, 60);
     const headers = new Headers();
     setCookie(headers, {
-      name: '__Host-login',
+      name: config.cookieName.login,
       value: login_token,
       httpOnly: true,
       sameSite: 'Lax',

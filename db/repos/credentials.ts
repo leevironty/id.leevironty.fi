@@ -2,7 +2,7 @@ import { hash } from "node:crypto";
 import db from '../client.ts';
 import * as models from '../models.ts';
 import { now, listObjs } from './util.ts';
-import { createToken, hashToken} from '@utils';
+import { createToken, hashToken} from '@/lib/utils.ts';
 import z from "zod";
 
 

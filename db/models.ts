@@ -2,6 +2,7 @@ import * as z from "zod";
 
 export const UserSchema = z.object({
   id: z.int(),
+  subject: z.string(),
   username: z.string(),
   displayname: z.string(),
   created_at: z.coerce.date(),
@@ -62,7 +63,7 @@ export const SessionSchema = z.object({
   token_hash: z.string(),
   created_at: z.coerce.date(),
   valid_until: z.coerce.date().nullable(),
-  log_out_after: z.iso.duration(),
+  log_out_after: z.int(),
 });
 
 /**
@@ -88,6 +89,7 @@ export const CredentialSchema = z.object({
 export const DB_INIT_STATEMENT = `
 CREATE TABLE IF NOT EXISTS users (
   id INTEGER PRIMARY KEY,
+  subject TEXT NOT NULL UNIQUE,
   username TEXT NOT NULL,
   displayname TEXT NOT NULL,
   created_at TEXT NOT NULL
@@ -138,7 +140,7 @@ CREATE TABLE IF NOT EXISTS sessions (
   token_hash TEXT NOT NULL,
   created_at TEXT NOT NULL,
   valid_until TEXT NOT NULL,
-  log_out_after TEXT NOT NULL
+  log_out_after INTEGER NOT NULL
 );
 
 -- CREATE TABLE IF NOT EXIST token (

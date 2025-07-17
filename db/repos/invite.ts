@@ -1,7 +1,7 @@
 import db from '../client.ts';
 import * as models from '../models.ts';
 import { now, listObjs } from './util.ts';
-import { createToken, hashToken} from '@utils';
+import { createToken, hashToken} from '@/lib/utils.ts';
 
 
 export function createInvitation(user_id: number, valid_for_minutes: number): string {
@@ -25,6 +25,10 @@ export function isValid(invite_token: string): boolean {
     throw new Error('Logic error! Should not have multiple same token hashes.');
   }
   return response.length === 1
+}
+
+export function invalidateUserInvites(user_id: number){
+  db.prepare(`DELETE FROM registration_tokens WHERE user_id = ?;`).run(user_id);
 }
 
 export function getInvitedUser(invite_token: string) {

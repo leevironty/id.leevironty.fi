@@ -17,6 +17,9 @@ const handleLoginFlow = async () => {
     headers: {"Content-Type": "application/json"},
     method: 'POST',
   });
+  if (verification.ok) {
+    location.reload();
+  }
 }
 
 export default function Register() {
