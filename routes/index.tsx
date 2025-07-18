@@ -27,12 +27,12 @@ export const handler = define.handlers({
       }));
       inner  = <User displayname={user.displayname} sessions={passed_sessions} credentials={[]}/>
     }
-    return ctx.render(
-      <div class="px-4 py-8 mx-auto fresh-gradient">
-        <div class="max-w-screen-md mx-auto flex flex-col items-center justify-center">
-        {inner}
-        </div>
-      </div>
-    )
+    return ctx.render(inner);
+    //   <div class="px-4 py-8 mx-auto fresh-gradient">
+    //     <div class="max-w-screen-md mx-auto flex flex-col items-center justify-center">
+    //     {inner}
+    //     </div>
+    //   </div>
+    // )
   }
 })

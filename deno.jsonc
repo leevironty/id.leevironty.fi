@@ -3,9 +3,10 @@
     "check": "deno fmt --check . && deno lint . && deno check **/*.ts && deno check **/*.tsx",
     "dev": "deno run -A --watch=static/,routes/ dev.ts",
     "build": "deno run -A dev.ts build",
-    "start": "deno run -A main.ts",
+    "start": "deno run --cached-only -A main.ts",
+    "docker-build": "deno task build && deno cache main.ts cli.ts",
     "update": "deno run -A -r jsr:@fresh/update .",
-    "cli": "deno run -A cli.ts",
+    "cli": "deno run --cached-only -A cli.ts",
     "seed": "rm -f database.db  && deno task cli user create leevi Leevi && deno task cli user get-token 1"
   },
   "lint": {

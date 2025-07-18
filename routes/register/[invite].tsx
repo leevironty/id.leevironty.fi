@@ -9,59 +9,6 @@ import { getInvitedUser } from "@/db/repos/invite.ts";
 import { setCookie, Cookie } from "@std/http/cookie"
 import config from '@/config.ts';
 
-interface Data {
-  name: string;
-}
-
-// function Register(props: Data) {
-//   // props.req.
-//   const count = useSignal(3);
-//   return (
-//     <div class="px-4 py-8 mx-auto fresh-gradient">
-//       <div class="max-w-screen-md mx-auto flex flex-col items-center justify-center">
-//         <img
-//           class="my-6"
-//           src="/logo.svg"
-//           width="128"
-//           height="128"
-//           alt="the Fresh logo: a sliced lemon dripping with juice"
-//         />
-//         <h1 class="text-4xl font-bold">Register passkey</h1>
-//         <p class="my-4">
-//           Time to register, {props.name}
-//         </p>
-
-//         <Counter count={count} />
-//       </div>
-//     </div>
-//   );
-// };
-
-
-
-// function RegisterPage(props: PageProps<Data>) {
-//   const count = useSignal(3);
-//   return (
-//     <div class="px-4 py-8 mx-auto fresh-gradient">
-//       <div class="max-w-screen-md mx-auto flex flex-col items-center justify-center">
-//         <img
-//           class="my-6"
-//           src="/logo.svg"
-//           width="128"
-//           height="128"
-//           alt="the Fresh logo: a sliced lemon dripping with juice"
-//         />
-//         <h1 class="text-4xl font-bold">Register passkey</h1>
-//         <p class="my-4">
-//           Time to register, {props.data.name}
-//         </p>
-
-//         <Counter count={count} />
-//       </div>
-//     </div>
-//   );
-// };
-
 
 function InvalidInvite(){
   return (
@@ -84,6 +31,7 @@ export const handler = define.handlers({
       value: invite_token,
       httpOnly: true,
       sameSite: 'Lax',
+      maxAge: 60 * 60 * 24,
     }
     setCookie(headers, cookie)
 
