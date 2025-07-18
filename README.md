@@ -15,3 +15,17 @@ deno task dev
 ```
 
 This will watch the project directory and restart as necessary.
+
+
+## Hardening checklist
+- [ ] Instrospection endpoint is private / reachable only by oathkeeper
+- [ ] Doublecheck CSRF cookie settings
+- [ ] Add CPS headers
+- [ ] Add rate limiting
+- [ ] Add db indices
+- [ ] Add token rotation (?)
+### From code review
+- [ ] Double-check webauthn userHandle is generated server-side.
+- [ ] Do not log secrets.
+- [ ] CSRF protection with a custom X-* header.
+- [ ] Error handling in UX

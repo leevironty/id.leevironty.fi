@@ -1,5 +1,5 @@
 import { createToken } from "@/lib/utils.ts";
-import { createSession, removeSession, getSessionUser } from "@/db/repos/session.ts";
+import { createSession, getSession, removeSession, getSessionUser } from "@/db/repos/session.ts";
 import { getCookies, setCookie } from "@std/http/cookie";
 import config from "@/config.ts";
 
@@ -7,7 +7,6 @@ import config from "@/config.ts";
 export function createSessionHeader(user_id: number, session_duration_hours?: number) {
   const headers = new Headers()
   const session_token = createToken(32);
-  // TODO: this may need adjustments for subdomains?
   setCookie(headers, {
     name: config.cookieName.session,
     value: session_token,
@@ -48,4 +47,13 @@ export function authenticatedUser(headers: Headers) {
     return null
   }
   return getSessionUser(session_token)
+}
+
+export function currentSession(headers: Headers) {
+  const cookies = getCookies(headers);
+  const session_token = cookies[config.cookieName.session]
+  if (session_token === undefined) {
+    return null
+  }
+  return getSession(session_token)
 }

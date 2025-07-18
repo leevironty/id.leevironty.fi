@@ -72,7 +72,6 @@ function InvalidInvite(){
 
 export const handler = define.handlers({
   async GET(ctx) {
-    // TODO: set invite token as cookie for API requests
     const invite_token = ctx.params.invite
     const user = getInvitedUser(invite_token);
 
@@ -85,8 +84,6 @@ export const handler = define.handlers({
       value: invite_token,
       httpOnly: true,
       sameSite: 'Lax',
-      // path: '/',
-      // secure: true,
     }
     setCookie(headers, cookie)
 

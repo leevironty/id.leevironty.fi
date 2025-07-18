@@ -20,8 +20,22 @@ import { Button } from "../components/Button.tsx";
 // }
 
 
+interface Credential {
+  created_at: Date;
+  last_used: Date;
+}
+
+interface Session {
+  created_at: Date;
+  log_out_after: number;
+  valid_until: Date | null;
+  is_current_session: boolean;
+}
+
 interface UserProps {
-  displayname: string
+  displayname: string;
+  sessions: Session[];
+  credentials: Credential[];
 }
 
 
@@ -35,6 +49,10 @@ export default function User(props: UserProps) {
   return (
     <div>
       <p>Logged in as {props.displayname}</p>
+      <p>Sessions</p>
+      <div>
+        {props.sessions.map((session, idx) => <p key={idx}>{idx}: {session.created_at.toISOString()}</p>)}
+      </div>
       <Button onClick={handleLogout}>Log out</Button>
     </div>
   );

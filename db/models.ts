@@ -79,7 +79,7 @@ export const CredentialSchema = z.object({
   user_id: z.int(),
   credential_id: z.string(),
   webauthn_user_id: z.string(),
-  public_key: z.string(), // TODO: maybe should be a blob?
+  public_key: z.string(),
   counter: z.int(),
   transports: z.string(),
   created_at: z.coerce.date(),
@@ -142,29 +142,4 @@ CREATE TABLE IF NOT EXISTS sessions (
   valid_until TEXT NOT NULL,
   log_out_after INTEGER NOT NULL
 );
-
--- CREATE TABLE IF NOT EXIST token (
---   id INTEGER PRIMARY KEY,
---   token_hash TEXT NOT NULL,
---   created_at TEXT NOT NULL,
---   valid_until TEXT NOT NULL,
--- );
--- 
--- CREATE TABLE IF NOT EXIST session (
---   token_id INTEGER PRIMARY KEY REFERENCES token(id),
---   user_id INTEGER REFERENCES user(id),
---   log_out_after TEXT NOT NULL
--- );
--- 
--- CREATE TABLE IF NOT EXISTS challenge (
---   token_id INTEGER PRIMARY KEY REFERENCES token(id),
---   challenge TEXT NOT NULL
--- );
--- 
--- CREATE TABLE IF NOT EXISTS invite_challenge (
---   token_id INTEGER PRIMARY KEY REFERENCES token(id),
---   challenge TEXT NOT NULL,
---   user_webauthn_id TEXT NOT NULL,
---   user_id INTEGER REFERENCES user(id)
--- );
 `;

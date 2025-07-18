@@ -37,7 +37,7 @@ export const handler = define.handlers({
       }
     })
     const registration_challenge_token = createToken(32)
-    // TODO: is webauthn user id necessary here?
+
     createRegistrationChallenge(user.id, registrationOptions.user.id ,registration_challenge_token, registrationOptions.challenge, 60)
     const headers = new Headers()
     const cookie: Cookie = {
@@ -49,18 +49,5 @@ export const handler = define.handlers({
     }
     setCookie(headers, cookie)
     return Response.json(registrationOptions, {headers: headers})
-
-    // try {
-    //   const res = await ctx.next();
-    // } catch (error) {
-    //   console.log('catched somethign')
-    //   console.error(error)
-    // }
-    // console.log('asdf')
-    // res.body = 'hello'
-    // const response = new Response('hello!', {status: 400, headers: new Headers({})})
-    // return new Response(
-    //   `Hello!`,
-    // );
   },
 });

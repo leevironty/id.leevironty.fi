@@ -1,10 +1,7 @@
-import { hash } from "node:crypto";
 import db from '../client.ts';
 import * as models from '../models.ts';
 import { now, listObjs } from './util.ts';
-import { createToken, hashToken} from '@/lib/utils.ts';
-import z from "zod";
-import { denoPlugin } from "jsr:@deno/esbuild-plugin@^1.1.1";
+import { hashToken} from '@/lib/utils.ts';
 
 
 const TIME_OFFSET_SECONDS = 30
@@ -19,17 +16,8 @@ export function createSession(user_id: number, session_token: string, log_out_af
 }
 
 export function getSessionUser(session_token: string) {
-  const session_token_hash = hashToken(session_token);
-  const raw_session = db.prepare(`
-    SELECT *
-    FROM sessions
-    WHERE token_hash = ?
-    AND (valid_until >= ? OR valid_until IS NULL);
-  `).get(session_token_hash, now());
-  if (raw_session === undefined) {
-    return null
-  }
-  const session = models.SessionSchema.parse(raw_session)
+  const session = getSession(session_token);
+  if (session === null) { return null }
   const raw_user = db.prepare(`SELECT * FROM users WHERE id = ?`).get(session.user_id);
   const user = models.UserSchema.parse(raw_user);
   
@@ -41,6 +29,25 @@ export function getSessionUser(session_token: string) {
   }
 
   return user
+}
+
+export function getUserSessions(user_id: number) {
+  const result = db.prepare(`SELECT * FROM sessions WHERE user_id = ?;`).all(user_id);
+  return result.map(res => models.SessionSchema.parse(res))
+}
+
+export function getSession(session_token: string) {
+  const session_token_hash = hashToken(session_token);
+  const raw_session = db.prepare(`
+    SELECT *
+    FROM sessions
+    WHERE token_hash = ?
+    AND (valid_until >= ? OR valid_until IS NULL);
+  `).get(session_token_hash, now());
+  if (raw_session === undefined) {
+    return null
+  }
+  return models.SessionSchema.parse(raw_session)
 }
 
 export function removeSession(session_token: string) {

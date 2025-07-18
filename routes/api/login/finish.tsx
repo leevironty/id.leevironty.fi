@@ -58,12 +58,11 @@ export const handler = define.handlers({
         transports: JSON.parse(credentials.transports),
       },
     });
-    // TODO: what happens when authentication fails?
-    updateCredential(credentials.id, verification.authenticationInfo.newCounter)
     console.log(verification)
     if (!verification.verified) {
       return Response.json({error: 'verification failed'}, {status: 400})
     }
+    updateCredential(credentials.id, verification.authenticationInfo.newCounter)
 
     const headers = createSessionHeader(credentials.user_id)
     return Response.json({ok: true}, {headers: headers})
