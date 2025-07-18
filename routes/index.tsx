@@ -7,7 +7,7 @@ import User from "@/islands/User.tsx";
 
 import { authenticatedUser, currentSession } from "@/lib/session.ts";
 import { getUserSessions } from "@/db/repos/session.ts";
-import z from "zod";
+import config from "@/config.ts"
 
 
 export const handler = define.handlers({
@@ -17,6 +17,20 @@ export const handler = define.handlers({
     if (user === null) {
       inner = <Login/>
     } else {
+      // console.log(ctx.params)
+      console.log(ctx.url.searchParams.get('redirect'))
+      const redirect = ctx.url.searchParams.get('redirect');
+      if (redirect) {
+        const target = new URL(redirect);
+        const isSecure = target.protocol === 'https' || config.domain === 'localhost'
+        const isSameTLD = target.hostname.endsWith(`.${config.domain}`) || target.hostname === config.domain
+        if (isSecure && isSameTLD) {
+          return Response.redirect(target, 302)
+        } else {
+          return Response.redirect('/', 302)
+        }
+      }
+      // console.log(ctx.req)
       const current_session = currentSession(ctx.req.headers);
       const sessions = getUserSessions(user.id);
       const passed_sessions = sessions.map(s => ({
