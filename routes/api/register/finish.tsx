@@ -14,7 +14,6 @@ import { createSessionHeader } from "@/lib/session.ts";
 
 export const handler = define.handlers({
   async POST(ctx) {
-    console.log('in register/finish')
     const cookies = getCookies(ctx.req.headers);
 
     const registration_token = cookies[config.cookieName.registration];
@@ -34,7 +33,6 @@ export const handler = define.handlers({
       expectedOrigin: config.expectedOrigin,
       expectedRPID: config.domain,
     })
-    console.log(verification);
     if (!verification.verified || verification.registrationInfo === undefined) {
       return Response.json({error: 'verification failed'}, {status: 400})
     }

@@ -1,25 +1,3 @@
-import type { Signal } from "@preact/signals";
-import { Button } from "../components/Button.tsx";
-
-
-// import { startAuthentication } from '@simplewebauthn/browser';
-
-// const handleLoginFlow = async () => {
-//   console.log('About to log in...')
-
-//   const authenticationOptions = await (await fetch('/api/login/start')).json();
-//   const authenticationResponse = await startAuthentication({
-//     optionsJSON: authenticationOptions
-//   });
-//   console.log(authenticationResponse);
-//   const verification = await fetch('/api/login/finish', {
-//     body: JSON.stringify(authenticationResponse),
-//     headers: {"Content-Type": "application/json"},
-//     method: 'POST',
-//   });
-// }
-
-
 interface Credential {
   created_at: Date;
   last_used: Date;
@@ -59,11 +37,6 @@ export default function User(props: UserProps) {
           type="button"
           class="bg-gray-900 active:bg-gray-700 border-2 border-transparent active:border-gray-800 hover:bg-gray-800 text-white py-1 px-4 rounded-md inline-block font-medium text-lg mb-5 mt-5"
           onClick={handleLogout}>Log out</button>
-        {/* <button
-          type="button"
-          onClick={handleLoginFlow}
-          class="bg-gray-900 active:bg-gray-700 border-2 border-transparent active:border-gray-800 hover:bg-gray-800 text-white py-1 px-4 rounded-md inline-block font-medium text-lg mb-5 mt-5"
-        >Authenticate</button> */}
       </div>
     </div>
   );

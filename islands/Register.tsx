@@ -9,7 +9,6 @@ interface RegisterProps {
 
 
 const handleRegisterFlow = async () => {
-  console.log('About to register...')
   const registrationOptions = await (await fetch('/api/register/start')).json();
   let registrationResponse: RegistrationResponseJSON;
   try {
@@ -27,8 +26,6 @@ const handleRegisterFlow = async () => {
   if (verification.ok) {
     window.location.href = '/'
   }
-  // console.log(verification)
-  // console.log('to be continued')
   // TODO: notify user of errors in case verification is not ok
 }
 

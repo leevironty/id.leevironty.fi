@@ -1,7 +1,4 @@
-import { useSignal } from "@preact/signals";
 import { define } from "@/lib/utils.ts";
-import { PageProps } from "fresh";
-import Counter from "@/islands/Counter.tsx";
 import Register from "@/islands/Register.tsx"
 
 import { getInvitedUser } from "@/db/repos/invite.ts";

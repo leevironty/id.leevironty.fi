@@ -11,9 +11,7 @@ import config from "@/config.ts";
 
 export const handler = define.handlers({
   async GET(ctx) {
-    console.log('at register/start')
     const cookies = getCookies(ctx.req.headers);
-    console.log('cookies: ', cookies)
     const invite = cookies[config.cookieName.invite];
     if (invite === undefined) {
       return Response.json({error: "invite cookie not set"}, {status: 400})

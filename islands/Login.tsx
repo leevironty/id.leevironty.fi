@@ -1,16 +1,10 @@
-import { Button } from "../components/Button.tsx";
-
-
 import { startAuthentication } from '@simplewebauthn/browser';
 
 const handleLoginFlow = async () => {
-  console.log('About to log in...')
-
   const authenticationOptions = await (await fetch('/api/login/start')).json();
   const authenticationResponse = await startAuthentication({
     optionsJSON: authenticationOptions
   });
-  console.log(authenticationResponse);
   const verification = await fetch('/api/login/finish', {
     body: JSON.stringify(authenticationResponse),
     headers: {"Content-Type": "application/json"},

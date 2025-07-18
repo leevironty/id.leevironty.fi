@@ -1,6 +1,4 @@
-import { useSignal } from "@preact/signals";
 import { define } from "@/lib/utils.ts";
-import Counter from "@/islands/Counter.tsx";
 import Login from "@/islands/Login.tsx";
 import User from "@/islands/User.tsx";
 
@@ -17,8 +15,6 @@ export const handler = define.handlers({
     if (user === null) {
       inner = <Login/>
     } else {
-      // console.log(ctx.params)
-      console.log(ctx.url.searchParams.get('redirect'))
       const redirect = ctx.url.searchParams.get('redirect');
       if (redirect) {
         const target = new URL(redirect);
@@ -30,7 +26,6 @@ export const handler = define.handlers({
           return Response.redirect('/', 302)
         }
       }
-      // console.log(ctx.req)
       const current_session = currentSession(ctx.req.headers);
       const sessions = getUserSessions(user.id);
       const passed_sessions = sessions.map(s => ({
@@ -42,11 +37,5 @@ export const handler = define.handlers({
       inner  = <User displayname={user.displayname} sessions={passed_sessions} credentials={[]}/>
     }
     return ctx.render(inner);
-    //   <div class="px-4 py-8 mx-auto fresh-gradient">
-    //     <div class="max-w-screen-md mx-auto flex flex-col items-center justify-center">
-    //     {inner}
-    //     </div>
-    //   </div>
-    // )
   }
 })

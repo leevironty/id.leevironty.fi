@@ -1,9 +1,9 @@
-import { createToken, define } from "@/lib/utils.ts";
+import { define } from "@/lib/utils.ts";
 import {
   verifyAuthenticationResponse,
 } from '@simplewebauthn/server';
 
-import { getCookies, setCookie } from "@std/http/cookie";
+import { getCookies } from "@std/http/cookie";
 import { getLoginChallenge } from "@/db/repos/challenge.ts";
 import { getCredentials, updateCredential } from "@/db/repos/credentials.ts";
 import { b64ToUint8Array } from "@/lib/utils.ts";
@@ -39,8 +39,6 @@ export const handler = define.handlers({
       return Response.json({error: 'login token is invalid'}, {status: 400})
     }
 
-    console.log(authenticationResponse)
-
     const credentials = getCredentials(id_and_handle.id, id_and_handle.response.userHandle)
     if (credentials === null) {
       return Response.json({error: 'credential not found'}, {status: 400})
@@ -58,7 +56,6 @@ export const handler = define.handlers({
         transports: JSON.parse(credentials.transports),
       },
     });
-    console.log(verification)
     if (!verification.verified) {
       return Response.json({error: 'verification failed'}, {status: 400})
     }
