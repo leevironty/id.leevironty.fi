@@ -28,4 +28,12 @@ This will watch the project directory and restart as necessary.
 - [ ] Double-check webauthn userHandle is generated server-side.
 - [ ] Do not log secrets.
 - [ ] CSRF protection with a custom X-* header.
-- [ ] Error handling in UX
+
+### UX checklist
+- [ ] Handle registration failures
+    - prob. better to return 403
+- [ ] Handle login failures
+
+
+### Future ideas
+- RBAC for external resources? Kratos clone
