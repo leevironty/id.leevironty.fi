@@ -1,0 +1,11 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/go-task/task/refs/heads/main/website/static/schema.json
+
+version: '3'
+tasks:
+  build:
+    requires:
+      vars:
+        - IMAGE_TAG
+    cmds:
+      - docker build . -t $IMAGE_TAG
+      - docker push $IMAGE_TAG

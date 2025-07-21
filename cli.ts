@@ -8,6 +8,7 @@ import * as challenge from '@/db/repos/challenge.ts';
 import * as credential from '@/db/repos/credentials.ts';
 import * as session from "@/db/repos/session.ts";
 import { now } from "@/db/repos/util.ts";
+import config from "@/config.ts";
 
 
 
@@ -18,14 +19,15 @@ const createUser = (username: string, displayname: string) => {
 }
 
 const createInvite = (username: string, valid_for_minutes: string | undefined) => {
-  const minutes = Number(valid_for_minutes) ?? 60;
+  console.log({username, valid_for_minutes})
+  const minutes = Number(valid_for_minutes ?? 60);
   const maybeUser = user.getUserByUsername(username)
   if (maybeUser === null) {
     console.log(`User ${username} does not exist!`)
     return
   }
   const token = invite.createInvitation(Number(maybeUser.id), minutes);
-  console.log(`Register at http://localhost:8000/register/${token}`)
+  console.log(`Register at ${config.expectedOrigin}/register/${token}`)
 }
 
 // Seed the database for testing
