@@ -1,8 +1,8 @@
-export default {
-  domain: "localhost",
-  parentDomain: "localhost",
-  rpName: 'Leevin login demo',
-  expectedOrigin: 'http://localhost:8000',
+const config = {
+  domain: Deno.env.get("DOMAIN") ?? "localhost",
+  parentDomain: Deno.env.get("TL_DOMAIN") ?? "localhost",
+  rpName: 'Leevi-ID',
+  expectedOrigin: Deno.env.get("EXPECTED_ORIGIN") ?? 'http://localhost:8000',
   cookieName: {
     invite: '__Host-invite',
     registration: '__Host-registration',
@@ -11,3 +11,5 @@ export default {
   },
   sessionDurationDefault: 2,
 }
+console.log('Configuration=', config)
+export default config;
