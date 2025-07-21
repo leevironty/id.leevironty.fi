@@ -1,4 +1,5 @@
 const config = {
+  dbPath: Deno.env.get('SQLITE_DB_PATH') ?? "database.db",
   domain: Deno.env.get("DOMAIN") ?? "localhost",
   parentDomain: Deno.env.get("TL_DOMAIN") ?? "localhost",
   rpName: 'Leevi-ID',

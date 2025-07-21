@@ -17,8 +17,14 @@ const createUser = (username: string, displayname: string) => {
   console.log(`Created user id ${user_id}`);
 }
 
-const createRegistrationToken = (user_id: string) => {
-  const token = invite.createInvitation(Number(user_id), 60);
+const createInvite = (username: string, valid_for_minutes: string | undefined) => {
+  const minutes = Number(valid_for_minutes) ?? 60;
+  const maybeUser = user.getUserByUsername(username)
+  if (maybeUser === null) {
+    console.log(`User ${username} does not exist!`)
+    return
+  }
+  const token = invite.createInvitation(Number(maybeUser.id), minutes);
   console.log(`Register at http://localhost:8000/register/${token}`)
 }
 
@@ -27,6 +33,7 @@ const createRegistrationToken = (user_id: string) => {
 
 
 const userCommand = program.command('user');
+const inviteCommand = program.command('invite');
 const debugCommand = program.command('debug');
 program.command('now').action(() => console.log(now()));
 // const serveCommand = program.command('serve')
@@ -36,8 +43,10 @@ program.command('now').action(() => console.log(now()));
 // }
 
 userCommand.command('create <username> <displayname>').action(createUser)
-userCommand.command('get-token <user_id>').action(createRegistrationToken)
 userCommand.command('list').action(() => console.log(user.listUsers()))
+
+inviteCommand.command('create <username> [valid_for_minutes]').action(createInvite)
+// userCommand.command('get-token <user_id>').action(createRegistrationToken)
 
 debugCommand.action(() => {
   const users = user.listUsers()

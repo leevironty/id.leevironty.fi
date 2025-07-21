@@ -90,7 +90,7 @@ export const DB_INIT_STATEMENT = `
 CREATE TABLE IF NOT EXISTS users (
   id INTEGER PRIMARY KEY,
   subject TEXT NOT NULL UNIQUE,
-  username TEXT NOT NULL,
+  username TEXT NOT NULL UNIQUE,
   displayname TEXT NOT NULL,
   created_at TEXT NOT NULL
 );

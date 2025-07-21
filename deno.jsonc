@@ -7,7 +7,7 @@
     "docker-build": "deno task build && deno cache main.ts cli.ts",
     "update": "deno run -A -r jsr:@fresh/update .",
     "cli": "deno run --cached-only -A cli.ts",
-    "seed": "rm -f database.db  && deno task cli user create leevi Leevi && deno task cli user get-token 1"
+    "seed": "rm -f database.db  && deno task cli user create leevi Leevi && deno task cli invite create leevi"
   },
   "lint": {
     "rules": {

@@ -20,3 +20,11 @@ export function removeUser(user_id: number): boolean {
   const result = db.prepare(`DELETE FROM users WHERE id = ?;`).run(user_id);
   return result.changes === 1;
 }
+
+export function getUserByUsername(username: string) {
+  const result = db.prepare('SELECT * FROM users WHERE username = ?').get(username);
+  if (result === undefined) {
+    return null
+  }
+  return models.UserSchema.parse(result)
+}
